@@ -15,9 +15,9 @@ export class UserService {
 
   emailExists(email: string): Observable<boolean> {
     return of(email).pipe(
-      delay(500),
+      delay(3000),
       map((email) => {
-        const emails = ['consult@zoaibkhan.com', 'zoaib@gmail.com'];
+        const emails = ['test@test.test'];
         return emails.includes(email);
       })
     );

@@ -1,0 +1,15 @@
+
+<div>
+    <label   for="email"> async email: </label>
+    <input class="form-control" id="email" type="text" [formControl]="userEmail"
+    [class.is-valid]="userEmail.valid"
+    [class.is-invalid]="userEmail.invalid"
+    [class.is-loading]="userEmail.pending">
+    
+    <div class="invali-feedback">
+        User email already exists
+    </div>
+
+
+ </div>
+    

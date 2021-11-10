@@ -1,21 +1,106 @@
+<div class="header">
 <mat-toolbar color="primary">
-  Angular Async Validation
+  Angular Test. Dynamic Forms
 </mat-toolbar>
+</div>
 
+
+<form [formGroup]="bigForm" (ngSubmit)="onSubmit()">
 <div class="container">
+
   <mat-form-field appearance="fill">
-    <mat-label>Email address</mat-label>
-    <input matInput [formControl]="emailControl">
-    <mat-error *ngIf="emailControl.errors?.required">
+    <mat-label>First Name</mat-label>
+    <input matInput [formControl]="userFirstName">
+    <mat-error *ngIf="userFirstName.errors?.required">
       This field is required
     </mat-error>
-    <mat-error *ngIf="emailControl.errors?.email">
-      Please enter a valid email address
-    </mat-error>
-    <mat-error *ngIf="emailControl.errors?.emailExists">
-      This email address is already registered. Please use another one.
-    </mat-error>
-    <mat-progress-spinner *ngIf="emailControl.pending" matSuffix [mode]="'indeterminate'" [diameter]="20">
-    </mat-progress-spinner>
+    <mat-error *ngIf="userFirstName.invalid && userFirstName.touched">
+      Please enter a valid user Name
+    </mat-error>  
   </mat-form-field>
+  
+  <mat-form-field appearance="fill">
+    <mat-label>Last Name</mat-label>
+    <input matInput [formControl]="userLastName">
+    <mat-error *ngIf="userLastName.errors?.required">
+      This field is required
+    </mat-error>
+    <mat-error *ngIf="userLastName.invalid && userLastName.touched">
+      Please enter a valid user Name
+    </mat-error>  
+  </mat-form-field>
+
+
+
+  <mat-form-field appearance="fill">
+  <mat-label for="picker">Date of birth: </mat-label>
+  <input  [formControl]="dateOfBirth" matInput [matDatepicker]="picker">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+  <mat-error *ngIf="dateOfBirth.hasError('required')">This field is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>choose technology</mat-label>
+    <mat-select  (ngModelChange)="selectTechnology($event)" [formControl]="technology" required>
+      <mat-option *ngFor="let tech of technologies" [value]="tech">
+        {{tech}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="technology.hasError('required')">Please choose option</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label> technology version</mat-label>
+    <mat-select [formControl]="version" required>
+      <mat-option>choose option</mat-option>
+      <mat-option  *ngFor="let vers of versionsA" [value]="vers" [disabled]="!isAngular">{{vers}}</mat-option>
+      <mat-option  *ngFor="let vers of versionsR" [value]="vers" [disabled]="!isReact">{{vers}}</mat-option>
+      <mat-option  *ngFor="let vers of versionsV" [value]="vers" [disabled]="!isVue">{{vers}}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="version.hasError('required')">Please choose option</mat-error>
+  </mat-form-field>
+
+  <div class="container">
+    <mat-form-field appearance="fill">
+      <mat-label>Email address</mat-label>
+      <input matInput [formControl]="emailControl">
+      <mat-error *ngIf="emailControl.errors?.required">
+        This field is required
+      </mat-error>
+      <mat-error *ngIf="emailControl.errors?.email">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="emailControl.errors?.emailExists">
+        This email address is already registered. Please use another one.
+      </mat-error>
+      <mat-progress-spinner *ngIf="emailControl.pending" matSuffix [mode]="'indeterminate'" [diameter]="20">
+      </mat-progress-spinner>
+    </mat-form-field>
+  </div>
+
+  <div formArrayName="hobbies">
+    <button class="add" mat-raised-button color="primary" (click)="addHobby()" type="button">+ Add another hobby</button>
+      <div *ngFor="let hobby of hobbies.controls; let i=index">
+        <mat-form-field appearance="fill">
+        <mat-label for="hobbyName-{{ i }}">Hobby:</mat-label>
+          <input id="hobbyName-{{ i }}" matInput type="text" [formControlName]="i">
+          <mat-error class="error" *ngIf="hobbies.invalid && hobbies.touched">Hobbies are very important ))</mat-error>
+      </mat-form-field>
+      <button mat-raised-button class="delete" color="primary" (click)="deleteHobby(i)" type="button" id="delete_hobby">X</button>
+    </div> 
+  </div>
+
+
+
+  <mat-error *ngIf="!bigForm.valid" class="format">Complete the form to enable button.</mat-error>
+  <button mat-raised-button  class="format" type="submit" [disabled]="!bigForm.valid">Submit</button>
+  <mat-label class="format">Form Status: {{ bigForm.status }}</mat-label>
+  <button mat-raised-button (click)="updateProfile()">Update Profile</button>
 </div>
+
+
+</form>
+
+
+
